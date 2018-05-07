@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--1. DB Config 설정 -->
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:config/mybatis/db.properties</value>
+        </property>
+    </bean>
+    <!--2. DB dataSource 설정 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url"       value="${jdbc.url}" />
+        <property name="username"    value="${jdbc.username}" />
+        <property name="password"    value="${jdbc.password}" />
+        <property name="validationQuery" value="SELECT 1" />
+        <property name="testOnBorrow"    value="true" />
+    </bean>
+    <!--3. Log4j 설정 -->
+    <bean id="Log4DataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSource"/>
+        <property name="logFormatter">
+            <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                <property name="loggingType" value="MULTI_LINE" />
+                <property name="sqlPrefix"   value="SQL => " />
+            </bean>
+        </property>
+    </bean>
+
+    <!--4. Mybatis 설정 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="Log4DataSource" />
+        <property name="mapperLocations" value="classpath*:config/mybatis/sql/${jdbc.dbtype}/*.xml" />
+    </bean>
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+    <!--5. Spring tx 설정 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="Log4DataSource" />
+    </bean>
+    <bean id="transactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+
+
+
+
+    <bean
+            id="abstractSchMasterInfoDAO"
+            class="server_api.DBConnecter.dao.AbstractSchMasterInfoDAO"
+            abstract="true">
+        <property
+                name="sqlSessionFactory"
+                ref="sqlSessionFactory" />
+    </bean>
+    <bean
+            id="schMasterInfoDAO"
+            name = "schMasterInfo"
+            class="server_api.DBConnecter.dao.SchMasterInfoDAOImpl"
+            parent="abstractSchMasterInfoDAO" >
+    </bean>
+
+    <bean
+        id="abstractSchDetailInfoDAO"
+        class="server_api.DBConnecter.dao.AbstractSchDetailInfoDAO"
+        abstract="true">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean
+            id="schDetailInfoDAO"
+            name = "schDetailInfo"
+            class="server_api.DBConnecter.dao.SchDetailInfoDAOImpl"
+            parent="abstractSchDetailInfoDAO">
+    </bean>
+
+<!--
+    <bean id="memberDao" class="org.mybatis.spring.mapper.MapperFactoryBean"
+          xsi:sqlSessionFactory-ref="sqlSessionFactory"
+          xsi:mapperLocations="server_api/dao/mapper/*.xml">
+        <property name="mapperInterface" value="server_api.dao.IMemberDao"></property>
+    </bean>
+-->
+
+
+</beans>

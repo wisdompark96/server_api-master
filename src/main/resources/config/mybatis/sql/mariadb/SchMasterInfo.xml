@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+      Created by aiden on 2017-06-29.
+      ?? http://blog.naver.com/PostView.nhn?blogId=ddraemon1&logNo=220444202520
+
+      http://thositeom.tistory.com/entry/String-Mybatis
+-->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="server_api.SchMasterInfo">
+<resultMap type="server_api.DBConnecter.dao.SchMasterInfo" id="SchMasterInfosResultMap">
+        <result property="sch_seq" column="sch_seq" />
+        <result property="sch_name" column="sch_name" />
+        <result property="sch_adrs" column="sch_adrs" />
+        <result property="sch_adrsSi" column="sch_adrsSi" />
+        <result property="sch_locX" column="sch_locX"/>
+        <result property="sch_locY" column="sch_locY"/>
+        <result property="sch_aftPrgm" column="sch_aftPrgm"/>
+        <result property="sch_feat" column="sch_feat"/>
+        <result property="sch_found" column="sch_found"/>
+        <result property="sch_phone" column="sch_phone"/>
+        <result property="sch_tchNum" column="sch_tchNum"/>
+        <result property="sch_mTch" column="sch_mTch"/>
+        <result property="sch_fTch" column="sch_fTch"/>
+        <result property="sch_spTch" column="sch_spTch"/>
+        <result property="sch_tchPerStu" column="sch_tchPerStu"/>
+        <result property="sch_mStu" column="sch_mStu"/>
+        <result property="sch_fStu" column="sch_fStu"/>
+        <result property="sch_totalStu" column="sch_totalStu"/>
+        <result property="sch_grade" column="sch_grade"/>
+        <result property="sch_foundDate" column="sch_foundDate"/>
+
+    </resultMap>
+    <select id="getAllSchMasterInfos" resultMap="SchMasterInfosResultMap" parameterType="server_api.DBConnecter.dao.SchMasterInfo">
+        SELECT *  FROM master_info
+    </select>
+    <select id="getSchMasterInfos" resultMap="SchMasterInfosResultMap" parameterType="server_api.DBConnecter.dao.SchMasterInfo">
+        SELECT *  FROM master_info WHERE sch_seq = #{sch_seq}
+    </select>
+    <select id="getSchMasterInfo" resultType="server_api.DBConnecter.dao.SchMasterInfo" parameterType="server_api.DBConnecter.dao.SchMasterInfo">
+        SELECT sch_seq, sch_name  FROM master_info WHERE sch_seq = #{sch_seq}
+    </select>
+
+    <select id="getSynthesistSchMasterInfos" resultMap="SchMasterInfosResultMap" parameterType="server_api.DBConnecter.dao.SchMasterInfo">
+        SELECT *  FROM master_info WHERE sch_name like  #{sch_name} OR sch_adrs like #{sch_name}
+    </select>
+    <select id="getSynthesisSchMasterInfo" resultType="server_api.DBConnecter.dao.SchMasterInfo" parameterType="server_api.DBConnecter.dao.SchMasterInfo">
+        SELECT *  FROM master_info WHERE sch_name = #{sch_name} OR sch_adrs = #{sch_name}
+    </select>
+
+<!--???
+    <select id="getSchnameSchMasterInfos" resultMap="SchMasterInfosResultMap" parameterType="server_api.DBConnector.dao.SchMasterInfo">
+        SELECT * FROM master_info WHERE sch_name like #{sch_name}
+    </select>
+    <select id="getSchnameSchMasterInfo" resultMap="server_api.DBConnecter.dao.SchMasterInfo" parameterType="server_api.DBConnector.dao.SchMasterInfo">
+        SELECT * FROM master_info WHERE sch_name = #{sch_name}
+    </select>-->
+
+    <!--    <select id="getLocationSchMasterInfos" resultType="server_api.DBConnecter.dao.SchMasterInfo" parameterType="server_api.DBConnecter.dao.SchMasterInfo">
+            SELECT *,
+            (6371*acos(cos(radians(#{sch_locY}))*cos(radians(#{sch_locY}))*cos(radians(#{sch_locX})
+            -radians(#{sch_locX}))+sin(radians(#{sch_locY}))*sin(radians(#{sch_locY}))))
+            AS distance
+            FROM mater_info
+            HAVING distance <= #{sch_tchPerStu}
+            ORDER BY distance
+            LIMIT 0,20
+        </select>-->
+
+</mapper>

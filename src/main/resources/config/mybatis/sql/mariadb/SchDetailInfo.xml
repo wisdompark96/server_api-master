@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+      Created by aiden on 2017-06-29.
+      ?? http://blog.naver.com/PostView.nhn?blogId=ddraemon1&logNo=220444202520
+
+      http://thositeom.tistory.com/entry/String-Mybatis
+-->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="server_api.SchDetailInfo">
+<resultMap type="server_api.DBConnecter.dao.SchDetailInfo" id="SchDetailInfoResultMap">
+    <result property="sch_gradNum" column="sch_gradNum" />
+    <result property="sch_gradGen" column="sch_gradGen" />
+    <result property="sch_gradSpe" column="sch_gradSpe" />
+    <result property="sch_gradSci" column="sch_gradSci" />
+    <result property="sch_gradFor" column="sch_gradFor" />
+    <result property="sch_gradArt" column="sch_gradArt" />
+    <result property="sch_gradMeis" column="sch_gradMeis" />
+    <result property="sch_gradIndPri" column="sch_gradIndPri" />
+    <result property="sch_gradIndPub" column="sch_gradIndPub" />
+    <result property="sch_gradEtc" column="sch_gradEtc" />
+    <result property="sch_gradGen_rate" column="sch_gradGen_rate" />
+    <result property="sch_gradSpe_rate" column="sch_gradSpe_rate" />
+    <result property="sch_gradSci_rate" column="sch_gradSci_rate" />
+    <result property="sch_gradFor_rate" column="sch_gradFor_rate" />
+    <result property="sch_gradArt_rate" column="sch_gradArt_rate" />
+    <result property="sch_gradMeis_rate" column="sch_gradMeis_rate" />
+    <result property="sch_gradPri_rate" column="sch_gradPri_rate" />
+    <result property="sch_gradPub_rate" column="sch_gradPub_rate" />
+    <result property="sch_gradEtc_rate" column="sch_gradEtc_rate" />
+    <result property="sch_grd1StNum" column="sch_grd1StNum" />
+    <result property="sch_grd2StNum" column="sch_grd2StNum" />
+    <result property="sch_grd3StNum" column="sch_grd3StNum" />
+    <result property="sch_cls1" column="sch_cls1" />
+    <result property="sch_cls2" column="sch_cls2" />
+    <result property="sch_cls3" column="sch_cls3" />
+    <result property="sch_cls1StNum" column="sch_cls1StNum" />
+    <result property="sch_cls2StNum" column="sch_cls2StNum" />
+    <result property="sch_cls3StNum" column="sch_cls3StNum" />
+    <result property="sch_stuChg" column="sch_stuChg" />
+    <result property="sch_stuStop" column="sch_stuStop" />
+    <result property="sch_stuStop_rate" column="sch_stuStop_rate" />
+    <result property="sch_stuChg_rate" column="sch_stuChg_rate" />
+    <result property="sch_vioStuPnsh" column="sch_vioStuPnsh" />
+    <result property="sch_vioDisc" column="sch_vioDisc" />
+    <result property="sch_aftPrgm" column="sch_aftPrgm" />
+    <result property="sch_subPrgm" column="sch_subPrgm" />
+    <result property="sch_specPrgm" column="sch_specPrgm" />
+    <result property="sch_pkgPrgm" column="sch_pkgPrgm" />
+    <result property="sch_mealFund" column="sch_mealFund" />
+    <result property="sch_mealFundStu" column="sch_mealFundStu" />
+    <result property="sch_mealExp" column="sch_mealExp" />
+    <result property="sch_dormStu" column="sch_dormStu" />
+    <result property="sch_seq" column="sch_seq" />
+
+</resultMap>
+    <select id="getSchDetailInfos" resultMap="SchDetailInfoResultMap" parameterType="server_api.DBConnecter.dao.SchDetailInfo">
+SELECT * FROM master_info m JOIN grade_info g ON m.sch_seq = g.sch_seq JOIN enterhighsch_info e ON m.sch_seq = e.sch_seq JOIN safety_info s ON m.sch_seq = s.sch_seq
+JOIN welfare_info w ON m.sch_seq = w.sch_seq WHERE m.sch_seq = #{sch_seq}
+    </select>
+
+    <!--    <select id="getLocationSchMasterInfos" resultType="server_api.DBConnecter.dao.SchMasterInfo" parameterType="server_api.DBConnecter.dao.SchMasterInfo">
+            SELECT *,
+            (6371*acos(cos(radians(#{sch_locY}))*cos(radians(#{sch_locY}))*cos(radians(#{sch_locX})
+            -radians(#{sch_locX}))+sin(radians(#{sch_locY}))*sin(radians(#{sch_locY}))))
+            AS distance
+            FROM mater_info
+            HAVING distance <= #{sch_tchPerStu}
+            ORDER BY distance
+            LIMIT 0,20
+        </select>-->
+
+</mapper>
